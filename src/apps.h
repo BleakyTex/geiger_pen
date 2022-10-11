@@ -46,7 +46,7 @@ int32_t dose=0;
 uint8_t dd1=0, dd2=0, dd3=0, dd4, b1, b2, carry;
 uint8_t mode=0;  // 6 dose display modes, see notes
 
-int16_t xi=25; // xi =  1/(200*k – 1), where k=0.0052 - uSv/h to CPM coefficient
+int16_t xi=25; // xi =  1/(200*k â€“ 1), where k=0.0052 - uSv/h to CPM coefficient
 
 void app_readGeiger(void) 
 {
@@ -198,7 +198,7 @@ void app_updateTime(void)
     sec = RTC_TR1; min = RTC_TR2; hrs = RTC_TR3; day = RTC_DR1; // Time/date registers are locked when RTC_TR1 is read
   }
 
-  volatile uint8_t dummy = RTC_DR3; // Time/date registers are unlocked when RTC_DR3 is read
+  volatile uint8_t dummy = RTC_DR3; // Time/date registers are locked when RTC_DR3 is read
   (void) dummy;
 
   if (day > 0) {

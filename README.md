@@ -1,1 +1,1 @@
-# pen_geiger
+A marker pen sized Geiger counter with up to 4 months battery life from 2xLR44, based on STM8L152K4 microcontroller. More information on [Hackaday](https://hackaday.io/project/187553-compact-low-power-geiger-counter).

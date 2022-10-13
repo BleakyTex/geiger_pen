@@ -109,18 +109,6 @@ void print_dose(void)
   }
   else print_oL();
   
-/*
-  else if (mode==5) {
-    dot = 0x00;
-    dd4 = 1;
-  }
-  else {
-    dot = 0x20;
-    dd4 = 2;
-  }
-*/
-  
-  
   LCD_RAM2  = NUM1_2[dd3] | NUM2_2[dd2];                 
   LCD_RAM9  = NUM1_9[dd3] | NUM2_9[dd2];                 
   LCD_RAM5  = NUM1_5[dd3] | NUM2_5[dd2] | NUM3_5[dd1];   

@@ -89,7 +89,7 @@ void print_dose(void)
 {
   if (mode==0) {
     dot = 0x20;  // set dot position
-    dd4 = 0;     // set u/m/s letter
+    dd4 = 0;     // 0 = 'u', 1 = 'm' letter
   }
   else if (mode==1) {
     dot = 0x08;

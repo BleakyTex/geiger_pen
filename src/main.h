@@ -1,4 +1,3 @@
-/* iostm8l152c6.h has an error in BITS_LCD_PM1 section: "unsigned char SEG07" must be deleted */
 #include "iostm8l152k4.h"
 
 /*!< Signed integer types  */

@@ -63,7 +63,8 @@ void shutdown(void)
   CLK_PCKENR2_bit.PCKEN21 = 0; 
   CLK_PCKENR1 = 0;              // disable peripherals
   
-  /* Precondition data for saving */
+  /* To compress data, variables are packed in bit fields with redundant bits removed */
+  /* Bit fields are slower than bit arithmetics in IAR compiler */
   uint8_t sec, min, hrs;
   uint16_t ddisp=0; // displayed numbers of dose
   ddisp = dd1 + 10*dd2 + 100*dd3;
@@ -88,8 +89,6 @@ void shutdown(void)
   }
   while (!FLASH_IAPSR_bit.DUL);
   
-  /* To compress data, variables are packed in bit fields with redundant bits removed */
-  /* Bit fields are slower than bit arithmetics in IAR compiler */
   *eeprom_addr++ = (uint8_t) (ddisp);                               
   *eeprom_addr++ = (uint8_t) (min & 0x3F) | ((ddisp >> 2) & 0xC0);  
   *eeprom_addr++ = (uint8_t) (dose);                                

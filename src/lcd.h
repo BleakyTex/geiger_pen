@@ -107,7 +107,10 @@ void print_dose(void)
     dot = 0x08;
     dd4 = 1;
   }
-  else print_oL();
+  else {
+    print_oL();
+    return;
+  }
   
   LCD_RAM2  = NUM1_2[dd3] | NUM2_2[dd2];                 
   LCD_RAM9  = NUM1_9[dd3] | NUM2_9[dd2];                 

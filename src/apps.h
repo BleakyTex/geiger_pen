@@ -31,8 +31,8 @@ const uint8_t LUT[] = {
 };
 
 // LUT2 and 3 are calculated from 60/k, where k=0.0052 - uSv/h to CPM coefficient
-const int32_t LUT2[] = {11538, 115384, 1153846, 11538461, 115384615};
-const uint8_t LUT3[] = {8, 4, 6, 1, 5, 3, 8}; // coefficient: 1153[8461538]
+const int32_t LUT2[] = {11538, 115384, 1153846, 11538461};
+const uint8_t LUT3[] = {8, 4, 6, 1, 5, 3}; // 60/0.0052 = 1153[846153]
 
 uint16_t cp5s;                 // Registered events during 5 sec period
 uint8_t  cpm[3] = {0};         // 24 bit int presented as array

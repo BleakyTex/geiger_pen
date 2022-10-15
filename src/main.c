@@ -29,7 +29,7 @@ void load_state(void)
   dose |= ((uint32_t)*eeprom_addr << 8);          ++eeprom_addr;
   buf = *eeprom_addr;                            
   dose |= ((uint32_t)buf << 16);                  ++eeprom_addr;
-  if (buf < 0) dose |= ((uint32_t)0xFF << 24);
+  if (buf > 0xB0) dose |= ((uint32_t)0xFF << 24); // 0xB0 is a most significant byte in the last element of LUT[2]
   mode = *eeprom_addr & 0x7;
   buf = (*eeprom_addr >> 3) & 0x1F;               ++eeprom_addr;
   hrs  = (buf % 10) | (((buf / 10) << 4) & 0x70);

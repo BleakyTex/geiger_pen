@@ -1,11 +1,5 @@
 #include "iostm8l152k4.h"
 
-/*---------------------------------------------------------------------------------------
- * Counts required to reach desired statistical accuracy: n = 1/(p^2), where p - accuracy 
- * At 0.12uSv/hr and k=0.0052, CPM = n = 24, then p = 1/sqrt(n) = 0.2 = 20%            
- * At n > 20 we get Gaussian distribution instead of Poisson               
- *-------------------------------------------------------------------------------------*/
-
 // Addition table, bit 7 is carry
 const uint8_t LUT[] = {
     0x00,  // 0

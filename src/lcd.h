@@ -107,6 +107,9 @@ void print_dose(void)
     dot = 0x08;
     dd4 = 1;
   }
+  else if (mode==5) {
+    dot = 0x00;
+    dd4 = 1;
   else {
     print_oL();
     return;

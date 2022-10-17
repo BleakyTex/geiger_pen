@@ -192,7 +192,7 @@ void app_updateTime(void)
     sec = RTC_TR1; min = RTC_TR2; hrs = RTC_TR3; day = RTC_DR1; // Time/date registers are locked when RTC_TR1 is read
   }
 
-  volatile uint8_t dummy = RTC_DR3; // Time/date registers are locked when RTC_DR3 is read
+  volatile uint8_t dummy = RTC_DR3;                             // Time/date registers are unlocked when RTC_DR3 is read
   (void) dummy;
 
   if (day > 0) {

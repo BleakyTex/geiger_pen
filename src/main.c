@@ -110,6 +110,7 @@ void reset_state(void)
   /* Clear variables */
   dd1=0; dd2=0; dd3=0; dose=0; mode=0;     // reset dose
   dt1=0; dt2=0; dt3=0; dt4=0; time_days=0; // reset time                   
+  mode_time = 0;
   
   RTC_WPR = 0xCA;        // Disable write protection to RTC registers
   RTC_WPR = 0x53;

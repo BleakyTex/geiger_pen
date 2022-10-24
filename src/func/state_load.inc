@@ -12,11 +12,21 @@
   ;   uint16_t dose_l:16; // radiation events counter (low 2 bytes), 0..11538461
   ; } state;
 
+  CLRW Y;
+
   LDW X, _eeprom_bgn + 0;
   LD A, XH;
   SRL A;
   SRL A;
-  PUSH A;             <-- minutes
+  LD YL, A;
+  LD A, #10;
+  DIV Y, A;
+  SWAP A;
+  PUSH A;
+  LD A, YL;
+  ADD A, (0x01, SP);
+  SWAP A;
+  LD (0x01, SP), A;   <-- minutes
   LD A, XH;
   AND A, #0x03;
   LD XH, A;
@@ -35,7 +45,15 @@
   LD A, XH;
   SRL A;
   SRL A;
-  PUSH A;             <-- seconds
+  LD YL, A;
+  LD A, #10;
+  DIV Y, A;
+  SWAP A;
+  PUSH A;
+  LD A, YL;
+  ADD A, (0x01, SP);
+  SWAP A;
+  LD (0x01, SP), A;   <-- seconds
   LD A, XH;
   AND A, #0x03;
   LD XH, A;
@@ -69,13 +87,22 @@
   LD A, XH;
   SRL A;
   SRL A;
-  SRL A;              <-- hours
+  SRL A;
+  LD YL, A;
+  LD A, #10;
+  DIV Y, A;
+  SWAP A;
+  PUSH A;
+  LD A, YL;
+  ADD A, (0x01, SP);
+  SWAP A;             <-- hours
 
   MOV RTC_WPR, #0xCA; <-- Disable write protection to RTC registers
   MOV RTC_WPR, #0x53;
   BSET RTC_ISR1, #7;  <-- Enter initialization mode
   BTJF RTC_ISR1, #6, $;
   LD RTC_TR3, A;      <-- Set hours
+  POP A;
   POP RTC_TR1;        <-- Set seconds
   POP RTC_TR2;        <-- Set minutes
   BRES RTC_ISR1, #7;  <-- Exit initialization mode

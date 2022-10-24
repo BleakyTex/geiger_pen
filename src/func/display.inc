@@ -110,7 +110,7 @@
     PUSH #3;               <-- push D4 to stack top
     CP A, #3;
     JRULT _md_less_three;
-      DEC (0x03, SP);
+      DEC (0x01, SP);
       SUB A, #3;
     _md_less_three:
     LD XL, A;

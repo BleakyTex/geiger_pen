@@ -131,7 +131,7 @@
       ADD A, #mantissae        ; 1
       CLRW X                   ; 1
       LD XL, A                 ; 1
-      LD A, (0x01, X)          ; 1
+      LD A, (X)                ; 1
       PUSH A                   ; 1
       INC s:dd123 + 1          ; 1
       LD A, s:dd123 + 1        ; 1
@@ -140,7 +140,7 @@
       JRULT _nod2              ; 1
         SUB A, #10             ; 1
         LD s:dd123 + 1, A      ; 1
-        LD A, (X)              ; 1
+        LD A, (0x01, X)        ; 1
         ADD A, (0x02, SP)      ; 1
         LD (0x02, SP), A       ; 1
       _nod2:                   ;

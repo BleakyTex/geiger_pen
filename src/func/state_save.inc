@@ -115,10 +115,10 @@
   PUSH A;
   LD A, YL;
   AND A, #0x0F;
-  SRL A;
+  SLL A;
   ADD A, (0x01, SP);
-  SRL A;
-  SRL A;
+  SLL A;
+  SLL A;
   ADD A, (0x01, SP);
   LD (0x01, SP), A;
   LD A, s:mode_dose;

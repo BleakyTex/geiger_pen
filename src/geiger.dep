@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <fileVersion>4</fileVersion>
+    <fileChecksum>1600000327</fileChecksum>
+    <configuration>
+        <name>Debug</name>
+        <outputs>
+            <file>$PROJ_DIR$\Debug\Exe\geiger.out</file>
+            <file>$TOOLKIT_DIR$\inc\io_macros.h</file>
+            <file>$TOOLKIT_DIR$\inc\iostm8l152k4.h</file>
+            <file>$PROJ_DIR$\Debug\List\geiger.map</file>
+            <file>$PROJ_DIR$\func\display.inc</file>
+            <file>$PROJ_DIR$\func\init.inc</file>
+            <file>$PROJ_DIR$\func\mode_switch.inc</file>
+            <file>$PROJ_DIR$\func\rate_update.inc</file>
+            <file>$PROJ_DIR$\func\state_load.inc</file>
+            <file>$PROJ_DIR$\func\state_reset.inc</file>
+            <file>$PROJ_DIR$\func\state_save.inc</file>
+            <file>$PROJ_DIR$\asmmain.s</file>
+            <file>$PROJ_DIR$\Debug\Obj\asmmain.o</file>
+            <file>$TOOLKIT_DIR$\config\lnkstm8l152k4.icf</file>
+        </outputs>
+        <file>
+            <name>$PROJ_DIR$\Debug\Exe\geiger.out</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 3</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 13 12</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 0 3</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\asmmain.s</name>
+            <outputs>
+                <tool>
+                    <name>ASTM8</name>
+                    <file> 12</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ASTM8</name>
+                    <file> 2 1 10 7 6 9 4 5 8</file>
+                </tool>
+            </inputs>
+        </file>
+    </configuration>
+    <configuration>
+        <name>Release</name>
+        <outputs />
+        <forcedrebuild>
+            <name>[MULTI_TOOL]</name>
+            <tool>ILINK</tool>
+        </forcedrebuild>
+    </configuration>
+</project>

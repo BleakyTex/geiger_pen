@@ -38,7 +38,7 @@ SECTION `.tiny.noinit`:DATA:ROOT(0)
   SYM4_8:     ds8 4;
   SYM4_B:     ds8 4;
 
-  modes:      ds8 12;
+  modes:      ds8 18;
 
   mantissae:  ds8 7;
 

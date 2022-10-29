@@ -178,4 +178,8 @@ __iar_program_start:
   jp_reloc(_main);
 
 
+SECTION `.intvec`:CODE:ROOT(0)
+  dw 0x8200, __iar_program_start;
+
+
 END

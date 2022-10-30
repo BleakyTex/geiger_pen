@@ -18,19 +18,3 @@
   LD  RTC_TR1, A;
   BRES RTC_ISR1, #7;  <-- Exit initialization mode
   MOV RTC_WPR, #0xFF; <-- Enable write protection to RTC registers
-
-  ; <-- Clear EEPROM
-  BTJT FLASH_IAPSR, #3, _eeprom_unlocked_clear;
-    MOV FLASH_DUKR, #0xAE;
-    MOV FLASH_DUKR, #0x56;
-    BTJF FLASH_IAPSR, #3, $;
-  _eeprom_unlocked_clear:
-
-  LDW _eeprom_bgn + 0, X;
-  LDW _eeprom_bgn + 2, X;
-  BTJF FLASH_IAPSR, #2, $;
-  LDW _eeprom_bgn + 4, X;
-  LDW _eeprom_bgn + 6, X;
-  BTJF FLASH_IAPSR, #2, $;
-
-  BRES FLASH_IAPSR, #3; <-- lock EEPROM

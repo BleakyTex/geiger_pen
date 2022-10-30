@@ -80,32 +80,33 @@
   _exit_prep_dose_near:        ;
     jp_reloc(_exit_prep_dose)  ; 1
   _nocmp_dose:                 ;
-    CP A, #12                  ; 1
+    CP A, #modes + 12          ; 1
     JRULE _mode4minus          ; 1
       LDW X, s:dose + 1        ; 2 <-- mode 5
       PUSHW Y                  ; 2
       LDW Y, #1153             ; 2
       DIVW X, Y                ; 16
-      LD A, YL                 ; 1
+      LD A, XL                 ; 1
       ADD A, s:dd123 + 1       ; 1
       LD s:dd123 + 1, A        ; 1
-      POPW Y                   ; 2
       LD A, #115               ; 1
-      DIV X, A                 ; 16
+      DIV Y, A                 ; 16
+      EXG A, YL;               ; 1
       ADD A, s:dd123 + 0       ; 1
-      LDW s:dose + 1, X        ; 2
-      JP _carry                ; 1
+      LDW s:dose + 1, Y        ; 2
+      POPW Y                   ; 2
+      JRA _carry               ; 1
     _mode4minus:               ;
     JRULT _mode3minus          ; 1
       LDW X, s:dose + 1        ; 2 <-- mode 4
       PUSHW Y                  ; 2
       LDW Y, #1153             ; 2
       DIVW X, Y                ; 16
-      LD A, YL                 ; 1
+      LD A, XL                 ; 1
       ADD A, s:dd123 + 0       ; 1
+      LDW s:dose + 1, Y        ; 2
       POPW Y                   ; 2
-      LDW s:dose + 1, X        ; 2
-      JP _carry                ; 1
+      JRA _carry               ; 1
     _mode3minus:               ;
       LD A, s:dose + 2         ; 1 <-- mode 3--
       SUB A, (0x02, Y)         ; 1

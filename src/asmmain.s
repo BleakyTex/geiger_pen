@@ -122,16 +122,13 @@ _main:
   BTJT CLK_REGCSR, #7, $;     <-- Wait until Flash/EEPROM switch off
   BSET CLK_REGCSR, #1;        <-- Configure low-power mode
   _endless_loop:
-    BTJT EXTI_SR1, #0, _state_save;
-      jp_reloc(_state_save_skip);
-    _state_save:
+    BTJF EXTI_SR1, #0, _state_save_skip;
       BRES CLK_REGCSR, #1;    <-- Configure high-power mode
       BTJF CLK_REGCSR, #0, $;
       BRES FLASH_CR1,  #3;    <-- Enable Flash/EEPROM
+      LD A, _main;            <-- Try reading from Flash to make it wake up
       BTJF CLK_REGCSR, #7, $; <-- Wait until Flash/EEPROM switch on
-      #include "func/state_save.inc"
-      BRES PWR_CSR2, #1;
-      HALT;
+      JP _state_save;         <-- NO RELOCS ON 'JP': branching to Flash
     _state_save_skip:
     BTJT TIM4_SR1, #0, _rate_update;
       jp_reloc(_rate_update_skip);
@@ -172,10 +169,15 @@ __iar_program_start:
     DEC A;
   JRNE _copy; <-- exactly 20% faster (!!) than the built-in DMA
   #include "func/init.inc"
-  #include "func/state_load.inc"
   LDW X, #(CSTACK$$Limit - 1);
   LDW SP, X;
+  #include "func/state_load.inc"
   jp_reloc(_main);
+
+_state_save:
+  #include "func/state_save.inc"
+  BRES PWR_CSR2, #1;
+  HALT;
 
 
 SECTION `.intvec`:CODE:ROOT(0)

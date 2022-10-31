@@ -68,7 +68,7 @@
   LD s:td_mt + 1, A;
   LD A, #10;
   DIV X, A;
-  JRNE _days_lessthan_1k;
+  JREQ _days_lessthan_1k;
     ADD A, #0x10;
   _days_lessthan_1k:
   LD s:td_mt + 0, A;
@@ -103,8 +103,10 @@
   BTJF RTC_ISR1, #6, $;
   LD RTC_TR3, A;      <-- Set hours
   POP A;
-  POP RTC_TR1;        <-- Set seconds
-  POP RTC_TR2;        <-- Set minutes
+  POP A;
+  LD RTC_TR1, A;      <-- Set seconds
+  POP A;
+  LD RTC_TR2, A;      <-- Set minutes
   BRES RTC_ISR1, #7;  <-- Exit initialization mode
   MOV RTC_WPR, #0xFF; <-- Enable write protection to RTC registers
 

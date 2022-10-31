@@ -82,7 +82,11 @@
 
   MOV TIM4_PSCR, #0x0E; TIM4_PSCR_bit.PSC = 0x0E; // Div by 16384 -> 0.5 sec
                   ;     // 5 second period (ARR = 2*sec - 1)
-  MOV TIM4_ARR, #9;     TIM4_ARR = 9; 
+  MOV TIM4_ARR, #9;     TIM4_ARR = 9;
+
+  ;MOV TIM4_PSCR, #0x0F;
+  ;MOV TIM4_ARR,  #0xFF; <-- DEBUG ONLY!!!
+
                    ;    // Update timer regs to apply prescaler value (optional)
   BSET TIM4_EGR, #0;    TIM4_EGR_bit.UG = 1;
   BSET TIM4_CR1, #0;    TIM4_CR1_bit.CEN = 1;    // Start the timer
@@ -140,9 +144,11 @@
 
   ; <-- the rest of initializations
 
+  BSET FLASH_CR2, #6; FLASH_CR2_bit.WPRG  = 1; // EEPROM write blocks are 4-byte
                    ;  // The reset value for PA_CR1 is 0x01
   MOV PA_CR1, #0x0D;  PA_CR1_bit.C12 = 1;      // Pull up PA2
                    ;  PA_CR1_bit.C13 = 1;      // Pull up PA3
   MOV PC_CR1, #0x1E;  PC_CR1 = 0x1E;           // Pull up unused pins
-  BSET FLASH_CR1, #2; FLASH_CR1_bit.WAITM = 1; // Disable Flash during wait mode
-  BSET FLASH_CR2, #6; FLASH_CR2_bit.WPRG  = 1; // EEPROM write blocks are 4-byte
+
+  ;BSET PC_CR1, #7; <-- Debug LED
+  ;BSET PC_DDR, #7;

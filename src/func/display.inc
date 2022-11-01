@@ -231,7 +231,7 @@
       JREQ _sec_min;
         RLWA X, A;         <-- A := sec, XH := min, XL := hrs
       _sec_min:
-      TNZ RTC_DR3;         <-- just finish reading time/date
+      LD A, RTC_DR3;       <-- just finish reading time/date
       LD A, XH;
       SWAP A;
       AND A, #0x0F;

@@ -184,7 +184,7 @@
   _exit_prep_dose:             ;
 
   ; <-- Update day
-  TNZ RTC_DR1;
+  LD A, RTC_DR1;
   JREQ _rtc_zero;       <-- RTC_DR1 cannot get >1 since previous tick
     MOV RTC_WPR, #0xCA; <-- Disable write protection to RTC registers
     MOV RTC_WPR, #0x53;

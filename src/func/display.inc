@@ -100,6 +100,35 @@
 
 
   _not_rad_rate:
+  PUSH CC;
+  BTJF EXTI_SR1, #3, _state_reset_skip;
+    INC s:reset_ctr;
+    JRMI _state_reset_wait;
+
+    ; <-- Clear variables
+    CLRW X;
+    CLR A;
+    LDW s:dose + 1, X;
+    MOV s:dose + 0, #1;
+    MOV s:mode_dose, #5;
+    LDW s:dd123 + 1, X;
+    LD  s:dd123 + 0, A;
+    LDW s:td_mt + 0, X;
+
+    MOV RTC_WPR, #0xCA; <-- Disable write protection to RTC registers
+    MOV RTC_WPR, #0x53;
+    BSET RTC_ISR1, #7;  <-- Enter initialization mode
+    BTJF RTC_ISR1, #6, $;
+    LD  RTC_DR3, A;
+    LDW RTC_DR1, X;
+    LDW RTC_TR2, X;
+    LD  RTC_TR1, A;
+    BRES RTC_ISR1, #7;  <-- Exit initialization mode
+    MOV RTC_WPR, #0xFF; <-- Enable write protection to RTC registers
+  _state_reset_skip:
+    MOV s:reset_ctr, #0xFE;
+  _state_reset_wait:
+  POP CC;
   JRPL _rad_dose;
     jp_reloc(_total_time);
   _rad_dose:

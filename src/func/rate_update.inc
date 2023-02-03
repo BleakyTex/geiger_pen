@@ -23,8 +23,10 @@
   ; <-- Equivalent to:
   ; <-- cpm += cp5s - event_buf[event_idx];
   ; <-- rad_rate = cpm / 2;
+  LD   A, s:event_idx;
+  LD   XL, A;
   CLR  A;
-  LDW  X, s:event_idx;
+  LD   XH, A;
   LDW  Y, X;
   LDW  X, (s:event_buf, X);
   NEGW X;
@@ -50,10 +52,10 @@
   ; <-- Update rolling sum buffer
   POPW X;
   LDW  (s:event_buf, Y), X;
-  DEC s:event_idx + 1;
-  DEC s:event_idx + 1;
+  DEC s:event_idx;
+  DEC s:event_idx;
   JRPL _event_idx_nonneg;
-    MOV s:event_idx + 1, #22;
+    MOV s:event_idx, #22;
   _event_idx_nonneg:
 
   ; <-- Update radiation dose

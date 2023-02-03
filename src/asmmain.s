@@ -51,7 +51,8 @@ SECTION `.tiny.noinit`:DATA:ROOT(0)
   cpm:        ds8 3;
   td_mt:      ds8 2; <-- time_days BCD + mode_time (top BCD digit)
   rad_rate:   ds8 2;
-  event_idx:  ds8 2;
+  reset_ctr:  ds8 1;
+  event_idx:  ds8 1;
 
   event_buf:  ; <-- had to be ds16 12 but there`s not enough room below 0x100
               ; <-- (still, this base address sure is below, so this is okay)
@@ -106,7 +107,8 @@ _tiny_bgn:
   db  0x00,0x00,0x00;
   db  0x00,0x00;
   db  0x00,0x00;
-  db  0x00,0x00;
+  db  0xFE;
+  db  0x00;
 
   dw  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00;
 
@@ -140,10 +142,6 @@ _main:
       BSET EXTI_SR1, #2;
       #include "func/mode_switch.inc"
     _mode_switch_skip:
-    BTJF EXTI_SR1, #3, _state_reset_skip;
-      BSET EXTI_SR1, #3;
-      #include "func/state_reset.inc"
-    _state_reset_skip:
   #include "func/display.inc"
 
   ; ===================== RAM CODE ENDS HERE ===================== ;

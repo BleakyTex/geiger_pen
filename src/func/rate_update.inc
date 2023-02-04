@@ -7,14 +7,52 @@
   PUSH A;
   LDW X, (0x01, SP);
 
-  ; <-- Apply dead time correction: CP5S = CP5S + ((CP5S / 32)^2 / 20)
-  ; <-- Formula is a polynomial approximation of x = x / (1 - x*38e-6)
-  LD  A, #32;
-  DIV X, A;
-  LD  A, XL;
-  MUL X, A;
-  LD  A, #20;
-  DIV X, A;
+  ; <-- Apply dead time correction: CP5S_dtc = CP5S / (1 - CP5S*38*10^-6).
+  ; <-- Max CP5S is CPS*5 = 1400*5 = 7000; piecewise approximation is needed.
+  ;
+  ; <-- Piece 1, (0..1500]:
+  ; <-- Using a quadratic formula: CP5S_dtc = CP5S + (CP5S / 6)^2 / 689.
+  ; <-- The initial divisor, 6, is the minimal integer that makes 1500 fit
+  ;     in a single byte after division (for MUL to work): 1500 / 6 = 250.
+  ; <-- The final divisor, 689, is the best integer for the task, since the
+  ;     approximation it yields differs from the original expression in the
+  ;     least number of values, and the maximum relative difference is 0.862%
+  ;     (the farther from 0 the less); in absolute values it always is -1..+1
+  ;     except for a single case: CP5S = 1499, where it equals -2 (or -0.13%)
+  ;
+  ; <-- Piece 2, (1500..7000]:
+  ; <-- Using a cubic formula to keep the error below 1%:
+  ; <-- CP5S_dtc = (CP5S + 7) + ((CP5S + 7) / 28)^2 / 35 +
+  ;              + (CP5S + 7) / 256 * ((CP5S + 7) / 28)^2 / 35 / 64.
+  ; <-- The relative diff is <0.2% in 88 of 100 cases, and never exceeds 0.4%
+  ;
+  CPW X, #1500;
+  JRULE _cp5s_le_1500; <-- piece 2 begins right below
+    ADDW X, #7;
+    LDW (0x01, SP), X; <-- [SP] = CP5S + 7
+    LD A, #28;
+    DIV X, A;
+    LD A, XL;
+    MUL X, A;
+    LD A, #35;
+    DIV X, A;          <-- X = ((CP5S + 7) / 28)^2 / 35
+    LDW Y, X;
+    SLLW X;
+    ADDW Y, (0x01, SP);<-- Y = ((CP5S + 7) / 28)^2 / 35 + (CP5S + 7)
+    SLLW X;
+    LD A, (0x01, SP);  <-- A = (CP5S + 7) / 256
+    SWAPW X;
+    LDW (0x01, SP), Y;
+    MUL X, A;          <-- X = ((CP5S + 7) / 28)^2 / 35 / 64 * (CP5S + 7) / 256
+  JRA _cp5s_corrected; <-- piece 1 begins right below
+  _cp5s_le_1500:
+    LD A, #6;
+    DIV X, A;
+    LD A, XL;
+    MUL X, A;
+    LDW Y, #689;
+    DIVW X, Y;
+  _cp5s_corrected:
   ADDW X, (0x01, SP);
   LDW (0x01, SP), X;
 

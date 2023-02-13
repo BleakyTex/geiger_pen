@@ -147,25 +147,32 @@ _main:
   ; ===================== RAM CODE ENDS HERE ===================== ;
 
 
-unroll_times EQU 60;
-unroll_copy MACRO times;
-  IF (times > 2);
-    unroll_copy(times - 2);
+unroll_dwords EQU 57;
+
+unroll_copy MACRO dwords;
+  IF (dwords > 1);
+    unroll_copy(dwords - 1);
   ENDIF;
   POPW Y;
-  LDW (times - 2, X), Y;
+  LDW (dwords * 4 - 4, X), Y;
+  POPW Y;
+  LDW (dwords * 4 - 2, X), Y;
+  IF (dwords == unroll_dwords);
+    ADDW X, #(unroll_dwords * 4);
+  ENDIF;
 ENDM;
 
 __iar_program_start:
   LDW X, #(_tiny_bgn - 1);
   LDW SP, X;
   CLRW X;
-  LD A, #((__iar_program_start - _tiny_bgn + unroll_times - 1) / unroll_times);
+  LD A, #((__iar_program_start - _tiny_bgn + (unroll_dwords * 4) - 1) / (unroll_dwords * 4));
   _copy:
-    unroll_copy(unroll_times);
-    ADDW X, #unroll_times;
+    unroll_copy(unroll_dwords);
     DEC A;
-  JRNE _copy; <-- exactly 20% faster (!!) than the built-in DMA
+    JREQ _copy_end;
+  JP _copy; <-- 22.93% faster (!!) than the built-in DMA
+  _copy_end:
   #include "func/init.inc"
   LDW X, #(CSTACK$$Limit - 1);
   LDW SP, X;

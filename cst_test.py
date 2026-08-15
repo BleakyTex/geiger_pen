@@ -78,7 +78,12 @@ def cst_mcu(array):
     return output
 
 '''
-
+Each window ends at the current second, so a short window's samples
+are a subset of a long one's. For Poisson counts their tests then
+correlate as sqrt(j/k) -- just the ratio, not the lengths. So 2 vs 4
+is as redundant as 32 vs 64. Window sizes 40 and 41 correlate 0.988.
+We can space the window sizes by ratio: log2(64/2) = 5, plus another
+one at low end for precision, thus 6 tests is enough instead of 63.
 '''
 
 M     = 64                  # max window, power of 2
